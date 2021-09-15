@@ -1,0 +1,44 @@
+name: EasyDesk Microservice Build Job
+description: >
+  Builds and tests a .NET microservice and produces an SQL script to update
+  the associated database.
+
+branding:
+  color: green
+  icon: check
+
+inputs:
+  main-project:
+    description: The path to the main project.
+    required: true
+  unit-tests-project:
+    description: The path to the unit test project.
+    required: true
+  output-dir:
+    description: The name of the directory where the build output will be stored (defaults to 'out/app').
+    required: false
+    default: out/app    
+  sql-file-name:
+    description: The name of the generated SQL script (defaults to 'out/update-database.sql').
+    required: false
+    default: out/update-database.sql
+
+runs:
+  using: composite
+  steps:
+    - name: Build
+      uses: EasyDesk/action-dotnet-build@v1
+    - name: Run Unit Tests
+      uses: EasyDesk/action-dotnet-test@v1
+      with:
+        path: ${{ inputs.unit-tests-project }}
+    - name: Generate database script
+      uses: EasyDesk/action-generate-migrations-script@v1
+      with:
+        project-dir: ${{ inputs.main-project }}
+        output-file: ${{ inputs.sql-file-name }}
+    - name: Publish
+      uses: EasyDesk/action-dotnet-publish@v1
+      with:
+        path: ${{ inputs.main-project }}
+        output-dir: ${{ inputs.binaries-dir }}
