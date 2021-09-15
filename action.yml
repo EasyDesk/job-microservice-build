@@ -8,6 +8,9 @@ branding:
   icon: check
 
 inputs:
+  dotnet-version:
+    description: The dotnet version to be used.
+    required: true
   main-project:
     description: The path to the main project.
     required: true
@@ -26,6 +29,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
     - name: Build
       uses: EasyDesk/action-dotnet-build@v1
     - name: Run Unit Tests
