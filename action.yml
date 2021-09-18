@@ -20,7 +20,7 @@ inputs:
   output-dir:
     description: The name of the directory where the build output will be stored (defaults to 'out/app').
     required: false
-    default: out/app    
+    default: out/app
   sql-file-name:
     description: The name of the generated SQL script (defaults to 'out/update-database.sql').
     required: false
@@ -48,4 +48,4 @@ runs:
       uses: EasyDesk/action-dotnet-publish@v1
       with:
         path: ${{ inputs.main-project }}
-        output-dir: ${{ inputs.binaries-dir }}
+        output-dir: ${{ inputs.output-dir }}
