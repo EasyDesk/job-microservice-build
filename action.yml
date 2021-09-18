@@ -25,6 +25,10 @@ inputs:
     description: The name of the generated SQL script (defaults to 'out/update-database.sql').
     required: false
     default: out/update-database.sql
+  warnings-as-errors:
+    description: Whether to treat build warnings as errors.
+    required: false
+    default: 'false'
 
 runs:
   using: composite
@@ -35,6 +39,8 @@ runs:
         dotnet-version: ${{ inputs.dotnet-version }}
     - name: Build
       uses: EasyDesk/action-dotnet-build@v1
+      with:
+        warnings-as-errors: ${{ inputs.warnings-as-errors }}
     - name: Run Unit Tests
       uses: EasyDesk/action-dotnet-test@v1
       with:
